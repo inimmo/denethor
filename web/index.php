@@ -7,7 +7,6 @@ $pages = [
 	'Patrick_Stewart',
 	'Christopher_Lee',
 ];
-# https://en.wikipedia.org/w/api.php?format=json&action=query&prop=extracts&exintro=&explaintext=&titles=David_Attenborough
 
 $query = [
 	'format'     => 'json',
@@ -23,14 +22,9 @@ $client = new GuzzleHttp\Client();
 $res = $client->get('https://en.wikipedia.org/w/api.php', ['query' => $query]);
 $response = json_decode($res->getBody(), true);
 
-if ($_GET['response'])
-{
-	echo '<pre>' . var_export($response, true) . '</pre>';
-	die;
-}
-
 foreach ($response['query']['pages'] as $page)
 {
+	// Grab everything up to the first full stop
 	$output[$page['title']] = [
 		'sentence' => reset(explode('.', $page['extract'], 2)),
 	];
@@ -41,7 +35,7 @@ foreach ($response['query']['pages'] as $page)
 <html>
 	<head>
 		<meta charset="UTF-8" />
-		<title>Oh god is everyone ok</title>
+		<title>Oh god is everyone ok?</title>
 	</head>
 	<body>
 		<?php foreach ($output as $person => $info): ?>
